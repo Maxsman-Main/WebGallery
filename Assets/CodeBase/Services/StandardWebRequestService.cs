@@ -14,24 +14,24 @@ namespace CodeBase.Services
             _context = context;
         }
 
-        public void GetTexture(string url, Action<string> onError, Action<Texture2D> onSuccess)
+        public void GetTexture(string url, Action<Texture2D> onSuccess)
         {
-            _context.StartCoroutine(GetTextureCoroutine(url, onError, onSuccess));
+            _context.StartCoroutine(GetTextureCoroutine(url, onSuccess));
         }
 
-        private IEnumerator GetTextureCoroutine(string url, Action<string> onError, Action<Texture2D> onSuccess)
+        private IEnumerator GetTextureCoroutine(string url, Action<Texture2D> onSuccess)
         {
             using UnityWebRequest unityWebRequest = UnityWebRequestTexture.GetTexture(url);
             yield return unityWebRequest.SendWebRequest();
 
             if (unityWebRequest.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError)
             {
-                onError.Invoke(unityWebRequest.error);
+                throw new Exception(unityWebRequest.error);
             }
             else
             {
                 DownloadHandlerTexture downloadHandlerTexture = unityWebRequest.downloadHandler as DownloadHandlerTexture;
-                onSuccess.Invoke(downloadHandlerTexture?.texture);
+                onSuccess?.Invoke(downloadHandlerTexture?.texture);
             }
         }
     }

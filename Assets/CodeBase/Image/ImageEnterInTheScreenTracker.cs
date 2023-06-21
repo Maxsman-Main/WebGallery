@@ -10,15 +10,14 @@ namespace CodeBase.Image
     public class ImageEnterInTheScreenTracker : MonoBehaviour
     {
         private ImageTextureCreator _textureCreator;
-        private bool _isImageShowed;
+        private bool _isImageLoaded;
         private RectTransform _rectTransform;
         private int _imageIndex;
 
-        public bool IsImageShowed 
-            => _isImageShowed;
+        public bool IsImageLoaded =>
+            _isImageLoaded;
 
         public Action<string, Action<Texture2D>> OnImageEnterInTheScreen;
-
 
         public void Init(int index)
         {
@@ -29,14 +28,14 @@ namespace CodeBase.Image
             
             _rectTransform = GetComponent<RectTransform>();
             _textureCreator = GetComponent<ImageTextureCreator>();
-            _isImageShowed = false;
+            _isImageLoaded = false;
             _imageIndex = index;
         }
 
         private void Update()
         {
-            if(_isImageShowed || !_rectTransform.IsVisible()) return;
-            _isImageShowed = true;
+            if(_isImageLoaded || !_rectTransform.IsVisible()) return;
+            _isImageLoaded = true;
             OnImageEnterInTheScreen?.Invoke($"{LinkConstants.ImageURL}/{_imageIndex}.{ImageConstants.ImageFormat}", _textureCreator.SetImage);
         }
     }

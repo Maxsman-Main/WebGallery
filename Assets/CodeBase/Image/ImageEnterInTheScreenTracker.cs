@@ -14,19 +14,23 @@ namespace CodeBase.Image
         private RectTransform _rectTransform;
         private int _imageIndex;
 
-        public int ImageIndex
-        {
-            set => 
-                _imageIndex = value;
-        }
+        public bool IsImageShowed 
+            => _isImageShowed;
 
         public Action<string, Action<Texture2D>> OnImageEnterInTheScreen;
 
-        private void Start()
+
+        public void Init(int index)
         {
+            if (index < 0)
+            {
+                throw new ArgumentException();
+            }
+            
             _rectTransform = GetComponent<RectTransform>();
             _textureCreator = GetComponent<ImageTextureCreator>();
             _isImageShowed = false;
+            _imageIndex = index;
         }
 
         private void Update()

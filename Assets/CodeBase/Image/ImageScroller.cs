@@ -11,6 +11,9 @@ namespace CodeBase.Image
         private List<ImageEnterInTheScreenTracker> _leftImageTrackers;
         private List<ImageEnterInTheScreenTracker> _rightImageTrackers;
 
+        private List<ImageZoom> _leftImageZooms;
+        private List<ImageZoom> _rightImageZooms;
+
         public List<ImageEnterInTheScreenTracker> OrderedImagesTrackers
         {
             get
@@ -22,21 +25,45 @@ namespace CodeBase.Image
                     imageTrackers.Add(_rightImageTrackers[i]);
                 }
 
-                Debug.Log(imageTrackers.Count);
                 return imageTrackers;
             }
         }
 
-        private void Start()
+        public List<ImageZoom> OrderedImagesZoom
+        {
+            get
+            {
+                List<ImageZoom> imageZooms = new();
+                for (int i = 0; i < leftImages.Count; i++)
+                {
+                    imageZooms.Add(_leftImageZooms[i]);
+                    imageZooms.Add(_rightImageZooms[i]);
+                }
+
+                return imageZooms;
+            }
+        }
+
+        public void Init()
         {
             _leftImageTrackers = new List<ImageEnterInTheScreenTracker>();
             _rightImageTrackers = new List<ImageEnterInTheScreenTracker>();
             
+            _leftImageZooms = new List<ImageZoom>();
+            _rightImageZooms = new List<ImageZoom>();
+
             //Add some refactor
             for (int i = 0; i < leftImages.Count; i++)
             {
                 _leftImageTrackers.Add(leftImages[i].GetComponent<ImageEnterInTheScreenTracker>());
                 _rightImageTrackers.Add(rightImages[i].GetComponent<ImageEnterInTheScreenTracker>());
+            }
+            
+            //Add some refactor
+            for (int i = 0; i < leftImages.Count; i++)
+            {
+                _leftImageZooms.Add(leftImages[i].GetComponent<ImageZoom>());
+                _rightImageZooms.Add(rightImages[i].GetComponent<ImageZoom>());
             }
         }
     }

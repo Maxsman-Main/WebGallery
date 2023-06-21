@@ -28,11 +28,9 @@ namespace CodeBase.Services
             {
                 throw new Exception(unityWebRequest.error);
             }
-            else
-            {
-                DownloadHandlerTexture downloadHandlerTexture = unityWebRequest.downloadHandler as DownloadHandlerTexture;
-                onSuccess?.Invoke(downloadHandlerTexture?.texture);
-            }
+
+            DownloadHandlerTexture downloadHandlerTexture = unityWebRequest.downloadHandler as DownloadHandlerTexture;
+            onSuccess?.Invoke(downloadHandlerTexture?.texture);
         }
     }
 }

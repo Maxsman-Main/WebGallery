@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using CodeBase.UI;
 using UnityEngine;
 
@@ -8,35 +9,37 @@ namespace CodeBase.Services
     {
         private readonly MonoBehaviour _context;
         private readonly LoadingScreen _loadingScreen;
-        private readonly Canvas _canvas;
         private readonly float _showTime;
         
-        public StandardLoadingSceneService(LoadingScreen loadingScreen, MonoBehaviour context,  Canvas canvas, float showTime)
+        public event Action OnLoadingEnd;
+        public event Action<float> OnLoadingTimerUpdate;
+
+        public StandardLoadingSceneService(LoadingScreen loadingScreen, MonoBehaviour context, float showTime)
         {
             _loadingScreen = loadingScreen;
             _context = context;
-            _canvas = canvas;
             _showTime = showTime;
         }
 
         public void Load()
         {
-            _context.StartCoroutine(ShowLoadingScreen(_showTime, _loadingScreen, _canvas));
+            _context.StartCoroutine(ShowLoadingScreen(_showTime, _loadingScreen));
         }
 
-        private IEnumerator ShowLoadingScreen(float showTime, LoadingScreen loadingScreen, Canvas canvas)
+        private IEnumerator ShowLoadingScreen(float showTime, LoadingScreen loadingScreen)
         {
-            LoadingScreen loadingScreenObject = Object.Instantiate(loadingScreen, loadingScreen.transform.position, Quaternion.identity);
-            loadingScreenObject.transform.SetParent(canvas.transform, false);
+            loadingScreen.Show();
             
+            const float timerStep = 0.1f;
             float timer = 0;
             while (timer < showTime)
             {
-                timer += Time.deltaTime;
-                yield return null;
+                timer += timerStep;
+                OnLoadingTimerUpdate?.Invoke(timer);
+                yield return new WaitForSeconds(timerStep);
             }
             
-            Object.Destroy(loadingScreenObject.gameObject);
+            OnLoadingEnd?.Invoke();
         }
     }
 }

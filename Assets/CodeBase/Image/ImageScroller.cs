@@ -52,14 +52,12 @@ namespace CodeBase.Image
             _leftImageZooms = new List<ImageZoom>();
             _rightImageZooms = new List<ImageZoom>();
 
-            //Add some refactor
             for (int i = 0; i < leftImages.Count; i++)
             {
                 _leftImageTrackers.Add(leftImages[i].GetComponent<ImageEnterInTheScreenTracker>());
                 _rightImageTrackers.Add(rightImages[i].GetComponent<ImageEnterInTheScreenTracker>());
             }
             
-            //Add some refactor
             for (int i = 0; i < leftImages.Count; i++)
             {
                 _leftImageZooms.Add(leftImages[i].GetComponent<ImageZoom>());

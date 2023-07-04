@@ -14,9 +14,6 @@ namespace CodeBase.Image
         private RectTransform _rectTransform;
         private int _imageIndex;
 
-        public bool IsImageLoaded =>
-            _isImageLoaded;
-
         public Action<string, Action<Texture2D>> OnImageEnterInTheScreen;
 
         public void Init(int index)
